@@ -3,7 +3,7 @@ var app = express();
 
 app.use(express.static('images'));
 
-app.get('/people', function(req, res){
+app.get('/invitePeople', function(req, res){
     setTimeout(function(){
         res.set("Access-Control-Allow-Origin", "*");
         res.json({

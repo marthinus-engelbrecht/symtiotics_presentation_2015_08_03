@@ -41,7 +41,7 @@ angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope) {
 
     $scope.invitePeople = function(){
 
-        var promise = $.get('http://localhost:3002/people').then(function(data){
+        $.get('http://localhost:3002/invitePeople').then(function(data){
             $scope.people.push(data);
             $scope.$digest();
         }).fail(function(){
