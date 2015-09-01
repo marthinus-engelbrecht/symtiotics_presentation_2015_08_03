@@ -8,11 +8,11 @@
 <body>
 <div ng-app="App">
     <div ng-controller="mainCtrl">
-        <button ng-click="getPeople()">Get some more people</button>
+        <button ng-click="invitePeople()">Invite some more cool people</button>
         <div gridster>
             <ul>
                 <li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x"
-                    size-y="item.size.y" ng-style="item.style.tile" ng-repeat="item in customItems">
+                    size-y="item.size.y" ng-style="item.style.tile" ng-repeat="item in people">
                     {{item.name}}
                     <img ng-style="item.style.image" ng-src="{{item.imageSrc}}">
                 </li>
