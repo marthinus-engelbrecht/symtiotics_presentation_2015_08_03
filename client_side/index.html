@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="components/angular-gridster/dist/angular-gridster.min.css"/>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div ng-app="App">
+    <div ng-controller="mainCtrl">
+        <button ng-click="getPeople()">Get some more people</button>
+        <div gridster>
+            <ul>
+                <li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x"
+                    size-y="item.size.y" ng-style="item.style.tile" ng-repeat="item in customItems">
+                    {{item.name}}
+                    <img ng-style="item.style.image" ng-src="{{item.imageSrc}}">
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script src="components/jquery-1.8.3.min.js"></script>
+<script src="components/javascript-detect-element-resize/jquery.resize.js"></script>
+<script src="components/angular/angular.min.js"></script>
+<script src="components/angular-gridster/dist/angular-gridster.min.js"></script>
+<script src="app.js"></script>
+</html>
