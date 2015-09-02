@@ -47,7 +47,7 @@ app.get('/awaitArrival', function(req, res) {
                     } ]
             }
         )
-    }, 10000);
+    }, 1000);
 });
 app.get('/invitePeople', function(req, res) {
     setTimeout(function() {

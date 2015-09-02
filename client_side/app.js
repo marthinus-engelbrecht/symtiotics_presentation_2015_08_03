@@ -1,3 +1,8 @@
+import handleResponse from './handleResponse.js';
+import displayDeliveryFailureMessage from './displayDeliveryFailureMessage.js';
+import awaitArrival from './awaitArrival.js';
+
+
 angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope, $http) {
 
     $scope.people = [
@@ -49,13 +54,14 @@ angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope, $h
             data.people.forEach(function(person){
                         $scope.people.push(person);
                     });
+            $scope.$digest();
         }
 
         function neverShowsUp() {
             alert('These guys are always letting us down');
         }
 
-        _self.peopleRespond = function(responseFunc, theyCantMakeItFunc, awaitFunc) {
+        _self.whenPeopleRespond = function(responseFunc, awaitFunc) {
             promise.success(function(response) {
                     var wait = responseFunc(response);
                     if (wait) {
@@ -68,7 +74,7 @@ angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope, $h
             return _self;
         };
 
-        _self.peopleDontGetTheInvite = function(failureFunc) {
+        _self.whenPeopleDontGetTheInvite = function(failureFunc) {
             promise.catch(failureFunc);
             return _self;
         };
@@ -76,40 +82,15 @@ angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope, $h
         return _self;
     }
 
-    function responseHandler(data) {
-        if (data.coming) {
-            alert("Cool, be there in a bit");
-            return data.coming;
-        }
-        else {
-            alert("Can't make it we are busy");
-            return data.coming;
-        }
-    }
-
-    function displayDeliveryFailureMessage() {
-        alert("Hey Crockford, I can't get hold of Uncle Bob and Addy");
-    }
-
-    function awaitThereArrival(atTheDoor, neverShowsUp) {
-        $http.get('http://localhost:3002/awaitArrival')
-            .success(function(data){
-                atTheDoor(data);
-            })
-            .catch(neverShowsUp);
-    }
-
-    function theyCantMakeItFunc() {
-        alert('Sorry guys we are a bit busy');
-    }
-
     $scope.onClick = function() {
 
         sendInvite()
-            .peopleRespond(responseHandler, theyCantMakeItFunc, awaitThereArrival)
-            .peopleDontGetTheInvite(displayDeliveryFailureMessage);
+            .whenPeopleRespond(handleResponse, awaitArrival)
+            .whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
     }
-})
-;
+});
 
+angular.element(document).ready(function() {
+    return angular.bootstrap(document.body, [ 'App' ]);
+});
 

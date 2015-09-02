@@ -6,7 +6,7 @@
     <title></title>
 </head>
 <body>
-<div ng-app="App">
+<div>
     <div ng-controller="mainCtrl">
         <button ng-click="onClick()">Invite some more cool people</button>
         <div gridster>
@@ -25,5 +25,6 @@
 <script src="components/javascript-detect-element-resize/jquery.resize.js"></script>
 <script src="components/angular/angular.min.js"></script>
 <script src="components/angular-gridster/dist/angular-gridster.min.js"></script>
-<script src="app.js"></script>
+<script src="components/systemjs/dist/system.js"></script>
+<script>System.import('dist/app.js')</script>
 </html>
