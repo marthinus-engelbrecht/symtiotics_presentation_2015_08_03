@@ -1,9 +1,12 @@
 import handleResponse from './handleResponse.js';
 import displayDeliveryFailureMessage from './displayDeliveryFailureMessage.js';
 import awaitArrival from './awaitArrival.js';
-
+import sendInvite from './sendInvite.js';
+import Mediator from  './mediator.js';
 
 angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope, $http) {
+
+    var appMediator = new Mediator();
 
     $scope.people = [
         {
@@ -44,47 +47,17 @@ angular.module('App', [ 'gridster' ]).controller('mainCtrl', function($scope, $h
         }
     ];
 
-    function sendInvite() {
-        var _self = {};
+    appMediator.listen('peopleHaveArrived', function(people){
+        people.forEach(function(person){
+            $scope.people.push(person);
+        });
 
-        var promise = $http.get('http://localhost:3002/invitePeople');
-
-        function atTheDoor(data) {
-            alert('Guys are here, open?');
-            data.people.forEach(function(person){
-                        $scope.people.push(person);
-                    });
-            $scope.$digest();
-        }
-
-        function neverShowsUp() {
-            alert('These guys are always letting us down');
-        }
-
-        _self.whenPeopleRespond = function(responseFunc, awaitFunc) {
-            promise.success(function(response) {
-                    var wait = responseFunc(response);
-                    if (wait) {
-                        awaitFunc(atTheDoor, neverShowsUp);
-                    }
-                    else {
-                        alert('Ok');
-                    }
-                });
-            return _self;
-        };
-
-        _self.whenPeopleDontGetTheInvite = function(failureFunc) {
-            promise.catch(failureFunc);
-            return _self;
-        };
-
-        return _self;
-    }
+        $scope.$digest();
+    });
 
     $scope.onClick = function() {
 
-        sendInvite()
+        sendInvite(appMediator)
             .whenPeopleRespond(handleResponse, awaitArrival)
             .whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
     }

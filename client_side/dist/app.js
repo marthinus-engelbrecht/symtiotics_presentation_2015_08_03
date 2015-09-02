@@ -1,7 +1,7 @@
-System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', './awaitArrival.js'], function (_export) {
+System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', './awaitArrival.js', './sendInvite.js', './mediator.js'], function (_export) {
     'use strict';
 
-    var handleResponse, displayDeliveryFailureMessage, awaitArrival;
+    var handleResponse, displayDeliveryFailureMessage, awaitArrival, sendInvite, Mediator;
     return {
         setters: [function (_handleResponseJs) {
             handleResponse = _handleResponseJs['default'];
@@ -9,10 +9,16 @@ System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', '.
             displayDeliveryFailureMessage = _displayDeliveryFailureMessageJs['default'];
         }, function (_awaitArrivalJs) {
             awaitArrival = _awaitArrivalJs['default'];
+        }, function (_sendInviteJs) {
+            sendInvite = _sendInviteJs['default'];
+        }, function (_mediatorJs) {
+            Mediator = _mediatorJs['default'];
         }],
         execute: function () {
 
             angular.module('App', ['gridster']).controller('mainCtrl', function ($scope, $http) {
+
+                var appMediator = new Mediator();
 
                 $scope.people = [{
                     size: { x: 1, y: 1 },
@@ -50,46 +56,17 @@ System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', '.
                     imageSrc: "images/Brendan_Eich.jpg"
                 }];
 
-                function sendInvite() {
-                    var _self = {};
+                appMediator.listen('peopleHaveArrived', function (people) {
+                    people.forEach(function (person) {
+                        $scope.people.push(person);
+                    });
 
-                    var promise = $http.get('http://localhost:3002/invitePeople');
-
-                    function atTheDoor(data) {
-                        alert('Guys are here, open?');
-                        data.people.forEach(function (person) {
-                            $scope.people.push(person);
-                        });
-                        $scope.$digest();
-                    }
-
-                    function neverShowsUp() {
-                        alert('These guys are always letting us down');
-                    }
-
-                    _self.whenPeopleRespond = function (responseFunc, awaitFunc) {
-                        promise.success(function (response) {
-                            var wait = responseFunc(response);
-                            if (wait) {
-                                awaitFunc(atTheDoor, neverShowsUp);
-                            } else {
-                                alert('Ok');
-                            }
-                        });
-                        return _self;
-                    };
-
-                    _self.whenPeopleDontGetTheInvite = function (failureFunc) {
-                        promise['catch'](failureFunc);
-                        return _self;
-                    };
-
-                    return _self;
-                }
+                    $scope.$digest();
+                });
 
                 $scope.onClick = function () {
 
-                    sendInvite().whenPeopleRespond(handleResponse, awaitArrival).whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
+                    sendInvite(appMediator).whenPeopleRespond(handleResponse, awaitArrival).whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
                 };
             });
 
