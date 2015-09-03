@@ -3,12 +3,16 @@
 <head>
     <link rel="stylesheet" href="components/angular-gridster/dist/angular-gridster.min.css"/>
     <meta charset="UTF-8">
-    <title></title>
+    <title>The Party</title>
 </head>
-<body>
+<body class="background" style="">
 <div>
+
     <div ng-controller="mainCtrl">
-        <button ng-click="onClick()">Invite some more cool people</button>
+        <div style="display: flex; flex-direction: column">
+            <h1 style="margin:auto;  font-size: 100px">Where the party is at</h1>
+            <button style="margin: auto; font-size: 25px; color: black; background-color: #e5ceff" ng-click="onClick()">Invite some more cool people</button>
+        </div>
         <div gridster>
             <ul>
                 <li gridster-item row="item.position[0]" col="item.position[1]" size-x="item.size.x"
@@ -27,4 +31,18 @@
 <script src="components/angular-gridster/dist/angular-gridster.min.js"></script>
 <script src="components/systemjs/dist/system.js"></script>
 <script>System.import('dist/app.js')</script>
+<style>
+    body::after {
+        content: "";
+        background: url('images/Friends.jpg');
+        opacity: 0.5;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: -1;
+        background-repeat: no-repeat; background-size: 110%; background-position-x: -10px; background-position-y: -15px;
+    }
+</style>
 </html>

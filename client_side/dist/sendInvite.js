@@ -19,11 +19,11 @@ System.register(['./asyncHttpGet.js'], function (_export) {
             alert('These guys are always letting us down');
         }
 
-        _self.whenPeopleRespond = function (responseFunc, awaitFunc) {
+        _self.whenPeopleRespond = function (handleResponse, awaitArrival) {
             promise.then(function (response) {
-                var wait = responseFunc(response);
+                var wait = handleResponse(response);
                 if (wait) {
-                    awaitFunc(atTheDoor, neverShowsUp);
+                    awaitArrival(atTheDoor, neverShowsUp);
                 } else {
                     alert('Ok');
                 }

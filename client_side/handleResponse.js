@@ -1,12 +1,15 @@
 export default function handleResponse(data) {
+    var shouldWait;
     if (data.coming) {
         alert("Cool, be there in a bit");
-        return data.coming;
+        shouldWait = true;
     }
     else {
         alert("Can't make it we are busy");
-        return data.coming;
+        shouldWait = false;
     }
+
+    return shouldWait
 }
 
 function theyCantMakeItFunc() {

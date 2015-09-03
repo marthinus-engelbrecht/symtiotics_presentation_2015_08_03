@@ -8,6 +8,7 @@ System.register(['./asyncHttpGet.js'], function (_export) {
         }],
         execute: function () {
             _export('default', function (atTheDoor, neverShowsUp) {
+
                 asyncHttpGet('http://localhost:3002/awaitArrival').then(function (data) {
                     atTheDoor(data);
                 }, function () {

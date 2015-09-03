@@ -1,7 +1,7 @@
 System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', './awaitArrival.js', './sendInvite.js', './mediator.js'], function (_export) {
     'use strict';
 
-    var handleResponse, displayDeliveryFailureMessage, awaitArrival, sendInvite, Mediator;
+    var handleResponse, displayDeliveryFailureMessage, awaitArrival, sendInvite, Mediator, $injector;
     return {
         setters: [function (_handleResponseJs) {
             handleResponse = _handleResponseJs['default'];
@@ -16,9 +16,13 @@ System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', '.
         }],
         execute: function () {
 
-            angular.module('App', ['gridster']).controller('mainCtrl', function ($scope, $http) {
-
-                var appMediator = new Mediator();
+            angular.module('App', ['gridster']).service('mediator', function () {
+                return new Mediator();
+            }).factory('sendInvite', function (mediator) {
+                return function () {
+                    return sendInvite(mediator);
+                };
+            }).controller('mainCtrl', function ($scope, mediator, sendInvite) {
 
                 $scope.people = [{
                     size: { x: 1, y: 1 },
@@ -56,19 +60,25 @@ System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', '.
                     imageSrc: "images/Brendan_Eich.jpg"
                 }];
 
-                appMediator.listen('peopleHaveArrived', function (people) {
+                function updateUi(people) {
                     people.forEach(function (person) {
                         $scope.people.push(person);
                     });
 
                     $scope.$digest();
+                }
+
+                mediator.listen('peopleHaveArrived', function (people) {
+                    updateUi(people);
                 });
 
                 $scope.onClick = function () {
 
-                    sendInvite(appMediator).whenPeopleRespond(handleResponse, awaitArrival).whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
+                    sendInvite().whenPeopleRespond(handleResponse, awaitArrival).whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
                 };
             });
+
+            $injector = angular.injector();
 
             angular.element(document).ready(function () {
                 return angular.bootstrap(document.body, ['App']);
