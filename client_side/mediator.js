@@ -11,9 +11,7 @@ class Mediator{
     }
 
     notify(event_name, payload){
-        this.handlers[event_name].forEach(function(func){
-            func(payload);
-        });
+        this.handlers[event_name].forEach((func) => func(payload));
     }
 
     getHandlers(event_name){

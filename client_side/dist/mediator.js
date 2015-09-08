@@ -29,7 +29,7 @@ System.register([], function (_export) {
                     key: "notify",
                     value: function notify(event_name, payload) {
                         this.handlers[event_name].forEach(function (func) {
-                            func(payload);
+                            return func(payload);
                         });
                     }
                 }, {

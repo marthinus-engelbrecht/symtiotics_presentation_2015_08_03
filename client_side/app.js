@@ -6,8 +6,7 @@ import Mediator from  './mediator.js';
 
 var app = angular.module('App', [ 'gridster' ]);
 
-app.module('App', [ 'gridster' ])
-    .service('mediator', function() {
+app.service('mediator', function() {
         return new Mediator();
     })
     .factory('sendInvite', function(mediator){
@@ -71,7 +70,7 @@ app.module('App', [ 'gridster' ])
         $scope.onClick = function() {
 
             sendInvite()
-                .whenPeopleRespond(handleResponse, awaitArrival)
+                ["when people respond"](handleResponse, awaitArrival)
                 .whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
         }
     });

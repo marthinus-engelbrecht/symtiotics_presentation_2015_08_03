@@ -1,7 +1,7 @@
 System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', './awaitArrival.js', './sendInvite.js', './mediator.js'], function (_export) {
     'use strict';
 
-    var handleResponse, displayDeliveryFailureMessage, awaitArrival, sendInvite, Mediator, $injector;
+    var handleResponse, displayDeliveryFailureMessage, awaitArrival, sendInvite, Mediator, app, $injector;
     return {
         setters: [function (_handleResponseJs) {
             handleResponse = _handleResponseJs['default'];
@@ -15,8 +15,9 @@ System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', '.
             Mediator = _mediatorJs['default'];
         }],
         execute: function () {
+            app = angular.module('App', ['gridster']);
 
-            angular.module('App', ['gridster']).service('mediator', function () {
+            app.service('mediator', function () {
                 return new Mediator();
             }).factory('sendInvite', function (mediator) {
                 return function () {
@@ -74,7 +75,7 @@ System.register(['./handleResponse.js', './displayDeliveryFailureMessage.js', '.
 
                 $scope.onClick = function () {
 
-                    sendInvite().whenPeopleRespond(handleResponse, awaitArrival).whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
+                    sendInvite()["when people respond"](handleResponse, awaitArrival).whenPeopleDontGetTheInvite(displayDeliveryFailureMessage);
                 };
             });
 
