@@ -7,3 +7,5 @@ To run this demo you need:
   ```
     Then execute the `live-server` command in the client_side app directory.
 3.  Execute the `node express-server` command in the server_side directory to start up the node sever. git 
+
+P.S: The actual power point presentation can be found in the root directory of this demo.
